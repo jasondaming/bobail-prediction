@@ -3,7 +3,7 @@ import multiprocessing
 from .processes.game_playing import play_games
 from multiprocessing.managers import BaseManager
 from .prediction_request import PredictionRequest
-from app.model.checkers import model as checkers_model
+from app.model.bobail import model as bobail_model
 from .processes.neural_net import run as run_neural_net
 
 def train(model_name, episodes = 5):

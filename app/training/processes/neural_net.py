@@ -1,6 +1,6 @@
 import queue
 import random
-from app.model.checkers import model as checkers_model
+from app.model.bobail import model as bobail_model
 
 model = None
 lessons = []
@@ -10,7 +10,7 @@ preferred_batch_count = 20
 def run(model_name, prediction_requests, lesson_pipes, halt_signal, lesson_signal):
 	print('neural net starting')
 	global model
-	model = checkers_model.build(model_name)
+	model = bobail_model.build(model_name)
 	print('neural net model loaded')
 
 	while True:

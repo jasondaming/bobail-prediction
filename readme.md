@@ -1,6 +1,6 @@
-A Python Flask app that uses unsupervised learning to train a neural network to learn how to play checkers (aka draughts).
+A Python Flask app that uses unsupervised learning to train a neural network to learn how to play bobail.
 
-This was built to work in conjunction with the [web app](https://github.com/ImparaAI/checkers-web) and can easily be run in a Kubernetes cluster [here](https://github.com/ImparaAI/checkers-kubernetes). This app receives requests from the web app to restart the training, predict a move, or analyze previous training sessions. A mysql database is used for organizing the sessions and a cron flask script is used to perform the training runs.
+This was built to work in conjunction with the [web app](TBD) and can easily be run in a Kubernetes cluster [here](TBD). This app receives requests from the web app to restart the training, predict a move, or analyze previous training sessions. A mysql database is used for organizing the sessions and a cron flask script is used to perform the training runs.
 
 [![Build Status](https://travis-ci.org/ImparaAI/checkers-prediction.png?branch=master)](https://travis-ci.org/ImparaAI/checkers-prediction)
 
@@ -43,7 +43,7 @@ Runs the next available training session. If a session is currently training, th
 
 # Assumptions
 
-The rules used are those defined by [our checkers library](https://github.com/ImparaAI/checkers). Importantly, each piece movement is completely distinct, with chained captures taking place over multiple turns where the player turn stays the same.
+The rules used are those defined by [the bobail library](https://github.com/jasondaming/bobail). Importantly, each piece movement is completely distinct, the bobail is regarded as belonging to a third player so neither player "owns" it, and each move (after the first) consists of a bobail move (1 space) then a regular move (till it runs into something).
 
 # Training strategy
 
@@ -57,31 +57,30 @@ The neural net's job is to reduce the amount of digging for the Monte Carlo tree
 
 ### Input
 
-The input to the neural net is a multidimensional numpy array that is `34 x 8 x 4` (depth x height x width), or `34` layers of `8 x 4` 2d arrays. The `8 x 4` is determined by the shape of the board. Ignoring the white spaces, each checkers board has 8 vertical spots and 4 horizontal spots. The `34` is made up like this:
+The input to the neural net is a multidimensional numpy array that is `43 x 5 x 5` (depth x height x width), or `43` layers of `5 x 5` 2d arrays. The `5 x 5` is determined by the shape of the board. The `43` is made up like this:
 
-- Layers **1-32** hold the state of the board's pieces for the last 8 moves. So layers **1-4** hold the board state for the most recent move, layers **5-8** hold the board state for the second most recent move, etc. Within a single move's board state, the first layer describes the position of the current player's non-king pieces, the second layer is for the current opponent's non-king pieces, the third is the current player's king pieces, and the fourth is the current opponent's king pieces. The distinction between the current player and the opponent is important as the neural net only ever makes predictions from the perspective of the current player.
-- Layer **33** has all 0s if it's player 1's turn and all 1s if it's player 2's turn.
-- Layer **34** has a binary representation of the current move count without a capture. If there have been 29 moves since the last capture, that would be represented as `11101` in binary. That is then converted into a numpy `8 x 4` array that looks like `[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1], [1, 1, 0, 1]]`. This is represented because a draw occurs after 40 consecutive moves without a capture.
+- Layers **1-42** hold the state of the board's pieces for the last 14 moves. So layers **1-3** hold the board state for the most recent move, layers **4-6** hold the board state for the second most recent move, etc. Within a single move's board state, the first layer describes the position of the current player's pieces, the second layer is for the current opponent's pieces, and the third is the location of the bobail. The distinction between the current player and the opponent is important as the neural net only ever makes predictions from the perspective of the current player.
+- Layer **43** has all 0s if it's player 1's turn and all 1s if it's player 2's turn.
 
-The end result is that every value in this multidimensional input is either a `1` or a `0` and it fully represents everything about the current state of the board and the 7 previous moves.
+The end result is that every value in this multidimensional input is either a `1` or a `0` and it fully represents everything about the current state of the board and the 13 previous moves.
 
 ### Outputs
 
 The neural net has two outputs:
 
 - A float that represents the expected win value for the current player given the current board state. In the Monte Carlo tree search algorithm this is the `W` value for the node being evaluated.
-- A flat list 256 elements long, each of which hold a float value between `0` and `1` representing a success probability for choosing that move. Each spot on the board gets 8 potential move positions representing the direction and the distance of the move. So positions `0-7` in this array are reserved for spot 1's potential moves:
+- A flat list 200 elements long, each of which hold a float value between `0` and `1` representing a success probability for choosing that move. Each spot on the board gets 8 potential move positions representing the direction and the distance of the move. So positions `0-7` in this array are reserved for spot 1's potential moves:
 
-- **0**: move 1 spot to the southeast
-- **1**: move 1 spot to the southwest
-- **2**: move 1 spot to the northeast
-- **3**: move 1 spot to the northwest
-- **4**: move 2 spots to the southeast
-- **5**: move 2 spots to the southwest
-- **6**: move 2 spots to the northeast
-- **7**: move 2 spots to the northwest
+- **0**: move to the southwest
+- **1**: move to the west
+- **2**: move to the northwest
+- **3**: move to the south
+- **4**: move to the north
+- **5**: move to the southeast
+- **6**: move to the east
+- **7**: move to the northeast
 
-This is repeated for all 32 positions on the board, for a total of 256 elements.
+This is repeated for all 25 positions on the board, for a total of 200 elements.
 
 During training, the output values are `0` for all impossible moves and a value between `0` and `1` for all possible moves. The value is determined by the number of visits in the Monte Carlo tree search simulation relative to the other possible moves. When the Monte Carlo tree search is making decisions about which moves to populate as child nodes, it iterates over all possible moves and finds the probability values (`p`) for them from this output, which eliminates the need to drill down further for that child node as you might do in a non-NN MCTS algorithm.
 
@@ -89,14 +88,14 @@ During training, the output values are `0` for all impossible moves and a value 
 
 By default, this app uses 75 convolution kernels (i.e. "neurons") per convolutional layer whereas AlphaZero uses 256. AlphaZero also uses 40 residual layers where this app uses 6. The reasons for this are:
 
-- Checkers is inherently simpler than Chess or Go
+- Bobail is inherently simpler than Chess or Go
 - We expect training to work decently on a moderately powerful CPU, rather than necessarily on a GPU or TPU
 
 It's worth keeping in mind that in neural nets finding the right number of "neurons" and residual layers is a bit of an art. There may indeed be a way of precisely quantifying the correlation between prediction accuracy and these hyperparameters for specific problems, but when this app was made it was not immediately obvious to us how to do it. Our method for choosing these numbers was a process of trial and error with a goal of minimizing them (for performance) while subjectively keeping a high enough prediction accuracy.
 
-# Why checkers?
+# Why bobail?
 
-Since checkers is a much simpler game than go or chess, the solution space is drastically reduced, while not being so trivial that it can be easily brute-forced on a regular computer in a short amount of time (like tic-tac-toe). This app's training can be run on a relatively cheap machine and doesn't really require a GPU or TPU.
+It is a relatively simple game that it appears that no one else has done any in depth strategy analysis on. This app's training can be run on a relatively cheap machine and doesn't really require a GPU or TPU.
 
 # Testing
 

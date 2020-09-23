@@ -1,5 +1,5 @@
 from app.player import Player
-from checkers.game import Game
+from bobail.game import Game
 from app.training.lesson import Lesson
 
 from datetime import datetime

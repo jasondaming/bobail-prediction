@@ -1,6 +1,6 @@
 import numpy as np
 from . import play_moves
-from app.model.checkers.input_builder import build as build_input_state
+from app.model.bobail.input_builder import build as build_input_state
 
 def test_kings(game):
 	boards = play_moves(game, get_moves())

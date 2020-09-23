@@ -22,7 +22,7 @@ RUN pip3 install -U \
 	keras==2.1 \
 	flask \
 	pytest \
-	imparaai-checkers \
+	bobail \
 	imparaai-montecarlo
 
 COPY docker/conf/circus.ini /etc/circus/circus.ini

@@ -1,6 +1,6 @@
 from app.player import Player
-from checkers.game import Game
-from app.model.checkers import model as checkers_model
+from bobail.game import Game
+from app.model.bobail import model as bobail_model
 
 def predict(moves):
 	game, prior_boards = initialize_game(moves)
@@ -13,7 +13,7 @@ def predict(moves):
 	if len(possible_moves) == 1:
 		return possible_moves[0]
 
-	model = checkers_model.build()
+	model = bobail_model.build()
 	player = Player(game.whose_turn(), game, model, prior_boards)
 
 	return player.simulate(10).get_next_move()

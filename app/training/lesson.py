@@ -1,6 +1,6 @@
 import numpy as np
-from app.model.checkers.action_space import get_action_index
-from app.model.checkers.input_builder import build as build_input
+from app.model.bobail.action_space import get_action_index
+from app.model.bobail.input_builder import build as build_input
 
 class Lesson:
 

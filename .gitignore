@@ -2,3 +2,4 @@
 *.pyc
 supervisord.log
 .pytest_cache
+/.vscode

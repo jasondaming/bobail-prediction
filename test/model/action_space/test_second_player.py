@@ -1,4 +1,4 @@
-from app.model.checkers.action_space import get_action_index
+from app.model.bobail.action_space import get_action_index
 
 def test_action_index(game):
 	game.move([9, 13])
@@ -15,16 +15,13 @@ def convert_to_index(direction, row, column):
 def get_action_space():
 	return [
 		[
-			[None, None, None, None],
-			[None, [6, 1], [7, 2], [8, 3]],
-			[[9, 5], [10, 6], [11, 7], [12, 8]],
-			[None, [14, 9], [15, 10], [16, 11]],
-			[[17, 13], [18, 14], [19, 15], [20, 16]],
-			[None, [22, 17], [23, 18], [24, 19]],
-			[[25, 21], [26, 22], [27, 23], [28, 24]],
-			[None, [30, 25], [31, 26], [32, 27]]
+			[None, None, None, None, None],
+			[[6, 2], [7, 3], [8, 4], [9, 5], None],
+			[[11, 7], [12, 8], [13, 9], [14, 10], None],
+			[[16, 12], [17, 13], [18, 14], [19, 15], None],
+			[[21, 17], [22, 18], [23, 19], [24, 20], None],
 		],
-		[
+		""" [
 			[None, None, None, None],
 			[[5, 1], [6, 2], [7, 3], [8, 4]],
 			[[9, 6], [10, 7], [11, 8], None],
@@ -93,5 +90,5 @@ def get_action_space():
 			[[21, 30], [22, 31], [23, 32], None],
 			[None, None, None, None],
 			[None, None, None, None]
-		]
+		] """
 	]

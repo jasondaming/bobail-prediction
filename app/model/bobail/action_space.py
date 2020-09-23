@@ -1,13 +1,13 @@
 import numpy as np
 
-NORTH_WEST_MOVE = 0
-NORTH_EAST_MOVE = 1
-SOUTH_WEST_MOVE = 2
-SOUTH_EAST_MOVE = 3
-NORTH_WEST_CAPTURE = 4
-NORTH_EAST_CAPTURE = 5
-SOUTH_WEST_CAPTURE = 6
-SOUTH_EAST_CAPTURE = 7
+SOUTH_WEST = 0
+WEST = 1
+NORTH_WEST = 2
+SOUTH = 3
+NORTH = 4
+SOUTH_EAST = 5
+EAST = 6
+NORTH_EAST = 7
 
 def get_action_index(game, move):
 	from_row = position_to_row(move[0], game)
@@ -32,31 +32,26 @@ def get_direction(from_row, from_column, to_row, to_column, player_turn):
 
 	directions = {
 		-1: {
-			0: NORTH_WEST_MOVE if from_row % 2 == 0 else NORTH_EAST_MOVE,
-			-1: None if from_row % 2 == 0 else NORTH_WEST_MOVE,
-			1: NORTH_EAST_MOVE if from_row % 2 == 0 else None,
+			0: NORTH,
+			-1: NORTH_WEST,
+			1: NORTH_EAST,
+		},
+		0: {
+			0: None,
+			-1: WEST,
+			1: EAST,
 		},
 		1: {
-			0: SOUTH_WEST_MOVE if from_row % 2 == 0 else SOUTH_EAST_MOVE,
-			-1: None if from_row % 2 == 0 else SOUTH_WEST_MOVE,
-			1: SOUTH_EAST_MOVE if from_row % 2 == 0 else None,
-		},
-		-2: {
-			0: None,
-			-1: NORTH_WEST_CAPTURE,
-			1: NORTH_EAST_CAPTURE,
-		},
-		2: {
-			0: None,
-			-1: SOUTH_WEST_CAPTURE,
-			1: SOUTH_EAST_CAPTURE,
+			0: SOUTH,
+			-1: SOUTH_WEST,
+			1: SOUTH_EAST,
 		},
 	}
 
 	return directions[row_direction][column_direction]
 
 def translate_row(row, board_height, player_turn):
-	return board_height - 1 - row if player_turn == 1 else row;
+	return board_height - 1 - row if player_turn == 1 else row
 
 def translate_column(column, board_width, player_turn):
-	return board_width - 1 - column if player_turn == 1 else column;
+	return board_width - 1 - column if player_turn == 1 else column

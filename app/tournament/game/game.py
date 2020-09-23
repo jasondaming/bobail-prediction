@@ -1,5 +1,5 @@
 import datetime
-from checkers.game import Game
+from bobail.game import Game
 
 class TournamentGame():
 

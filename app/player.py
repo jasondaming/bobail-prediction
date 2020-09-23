@@ -2,8 +2,8 @@ import numpy as np
 from copy import deepcopy
 from montecarlo.node import Node
 from app.model.model import Model
-from app.model.checkers import action_space
-from app.model.checkers import input_builder
+from app.model.bobail import action_space
+from app.model.bobail import input_builder
 from montecarlo.montecarlo import MonteCarlo
 
 class Player:
