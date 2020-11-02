@@ -18,7 +18,7 @@ def create_app(config = None):
 def load_config(app, config):
 	app.config.from_mapping(
 		SECRET_KEY = 'dev',
-		DATABASE_FILE = os.path.join(app.instance_path, 'sqlite', 'prediction.db'),
+		DATABASE_FILE = os.path.join(app.instance_path, 'prediction.db'),
 		TRAINING_EPISODES_PER_BATCH = 100,
 		TRAINING_SIMULATION_DEPTH = 10,
 	)
@@ -27,6 +27,9 @@ def load_config(app, config):
 		app.config.from_pyfile('config.py', silent = True)
 	else:
 		app.config.update(config)
+
+	if not os.path.exists(app.instance_path):
+		os.makedirs(app.instance_path)
 
 def prepare_instance_path(app):
 	try:

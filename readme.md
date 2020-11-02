@@ -2,7 +2,7 @@ A Python Flask app that uses unsupervised learning to train a neural network to 
 
 This was built to work in conjunction with the [web app](TBD) and can easily be run in a Kubernetes cluster [here](TBD). This app receives requests from the web app to restart the training, predict a move, or analyze previous training sessions. A mysql database is used for organizing the sessions and a cron flask script is used to perform the training runs.
 
-[![Build Status](https://travis-ci.org/ImparaAI/checkers-prediction.png?branch=master)](https://travis-ci.org/ImparaAI/checkers-prediction)
+[![Build Status](https://travis-ci.org/jasondaming/bobail-prediction.svg?branch=master)](https://travis-ci.org/github/jasondaming/bobail-prediction)
 
 # Routes
 

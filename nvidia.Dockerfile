@@ -43,7 +43,7 @@ COPY . /var/app
 
 WORKDIR /var/app
 
-EXPOSE 80
+EXPOSE 5678
 
 ENV TERM xterm-color
 ENV TF_CPP_MIN_LOG_LEVEL 2 #disables cpu compile warnings

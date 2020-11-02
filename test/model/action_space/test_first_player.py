@@ -8,16 +8,16 @@ def test_action_index(game):
 					assert get_action_index(game, move) == convert_to_index(direction, row, column)
 
 def convert_to_index(direction, row, column):
-	return (direction * 8 * 4) + (row * 4) + column
+	return direction + ((row * 5) + column) * 8
 
 def get_action_space():
 	return [
 		[
-			[None, None, None, None, None],
-			[None, [19, 25], [18, 24], [17, 23], [16, 22]],
-			[None, [14, 20], [13, 19], [12, 18], [11, 17]],
-			[None, [9, 15], [8, 14], [7, 13], [6, 12]],
-			[None, [4, 10], [3, 9], [2, 8], [1, 7]]
+			[[2225, 19], [24, 18], [23, 17], [22, 16], None],
+			[None, [7, 11], [8, 12], [9, 13], [10, 14]],
+			[[11, 7], [12, 8], [13, 9], [14, 10], None],
+			[[16, 12], [17, 13], [18, 14], [19, 15], None],
+			[[21, 17], [22, 18], [23, 19], [24, 20], None],
 		],
 		[
 			[[25, 24], [24, 23], [23, 22], [22, 21], None],

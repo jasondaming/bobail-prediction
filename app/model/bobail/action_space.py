@@ -1,13 +1,13 @@
 import numpy as np
 
-SOUTH_WEST = 0
+NORTH_WEST = 0
 WEST = 1
-NORTH_WEST = 2
-SOUTH = 3
-NORTH = 4
-SOUTH_EAST = 5
+SOUTH_WEST = 2
+NORTH = 3
+SOUTH = 4
+NORTH_EAST = 5
 EAST = 6
-NORTH_EAST = 7
+SOUTH_EAST = 7
 
 def get_action_index(game, move):
 	from_row = position_to_row(move[0], game)
@@ -15,8 +15,8 @@ def get_action_index(game, move):
 	from_column = position_to_column(move[0], game)
 	to_column = position_to_column(move[1], game)
 	direction = get_direction(from_row, from_column, to_row, to_column, game.whose_turn())
-
-	return (direction * game.board.height * game.board.width) + (from_row * game.board.width) + from_column
+	print(str(from_row) + str(from_column) + str(direction))
+	return (((from_row * game.board.width) + from_column) * 8) + direction
 
 def position_to_row(position, game):
 	row = (position - 1) // game.board.width

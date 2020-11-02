@@ -1,7 +1,7 @@
 from app.model.bobail.action_space import get_action_index
 
 def test_action_index(game):
-	game.move([9, 13])
+	game.move([2, 17])
 
 	for direction, rows in enumerate(get_action_space()):
 		for row, columns in enumerate(rows):

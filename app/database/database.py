@@ -4,6 +4,7 @@ from datetime import datetime
 
 def get_connection():
 	if 'db_connection' not in flask.g:
+		print (flask.current_app.config['DATABASE_FILE'])
 		connection = sqlite3.connect(flask.current_app.config['DATABASE_FILE'], detect_types = sqlite3.PARSE_DECLTYPES)
 		connection.isolation_level = None #autocommit
 
@@ -58,7 +59,7 @@ def initialize():
 		cursor = get_cursor()
 		cursor.executescript(f.read().decode('utf8'))
 		cursor.close()
-
+	print("test")
 	return True
 
 def database_already_initialized():

@@ -21,7 +21,8 @@ RUN pip install -U \
 	flask \
 	pytest \
 	bobail \
-	imparaai-montecarlo
+	imparaai-montecarlo \
+	git
 
 COPY docker/conf/circus.ini /etc/circus/circus.ini
 COPY docker/conf/.bashrc /root/.bashrc
@@ -29,7 +30,6 @@ COPY docker/start.sh /bin/original_start.sh
 COPY docker/crontab /var/cron
 
 RUN ln -snf /bin/bash /bin/sh && \
-	find /usr/lib/python3.8.5 -name __pycache__ | xargs rm -r && \
 	sed -i -e 's/\r$//' /root/.bashrc && \
     tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
     chmod -R 700 /bin/start.sh && \
@@ -41,7 +41,7 @@ COPY . /var/app
 
 WORKDIR /var/app
 
-EXPOSE 80
+EXPOSE 5678
 
 ENV TERM xterm-color
 ENV TF_CPP_MIN_LOG_LEVEL 2 #disables cpu compile warnings

@@ -2,9 +2,9 @@ language: python
 services:
   - docker
 before_install:
-  - docker build -t imparaai/prediction -f cpu.Dockerfile .
+  - docker build -t bobail-prediction -f cpu.Dockerfile .
 script:
-  - docker run imparaai/prediction bash -c "pytest"
+  - docker run bobail-prediction bash -c "pytest"
 notifications:
   email:
     on_success: never
