@@ -5,7 +5,7 @@ from datetime import datetime
 def get_connection():
 	if 'db_connection' not in flask.g:
 		print (flask.current_app.config['DATABASE_FILE'])
-		connection = sqlite3.connect(flask.current_app.config['DATABASE_FILE'], detect_types = sqlite3.PARSE_DECLTYPES)
+		connection = sqlite3.connect('/var/app/instance/prediction.db', detect_types = sqlite3.PARSE_DECLTYPES)
 		connection.isolation_level = None #autocommit
 
 		flask.g.db_connection = connection

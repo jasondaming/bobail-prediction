@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cd /var/app/instance
-
-touch prediction.db
-
 cd /var/app
 
 echo "Attempting to initialize the database..."
